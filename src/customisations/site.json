@@ -1,10 +1,10 @@
 {
-  "groupName": "",
-  "charityNumber": "",
-  "primary": "",
-  "primaryForeground": "",
+  "groupName": "1st Ottershaw Scout Group",
+  "charityNumber": "3997492",
+  "primary": "#000066",
+  "primaryForeground": "#ffffff",
   "logoAlt": "",
   "footerText": "",
-  "githubUser": "",
-  "githubRepo": ""
+  "githubUser": "1st-Chertsey-Scout-Group",
+  "githubRepo": "1stottershaw.org.uk"
 }

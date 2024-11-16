@@ -1,4 +1,30 @@
 {
-    "links": [],
-    "copyright": ""
+    "links": [
+        {
+            "target": "_blank",
+            "text": "Accounts and Annual Returns",
+            "url": "https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/3997492/accounts-and-annual-returns"
+        },
+        {
+            "target": "_self",
+            "text": "Privacy Policy",
+            "url": "/privacy-policy"
+        },
+        {
+            "target": "_blank",
+            "text": "Runnymede District",
+            "url": "http://runnymedescouts.org.uk/"
+        },
+        {
+            "target": "_blank",
+            "text": "Surrey County",
+            "url": "http://www.surrey-scouts.org.uk/"
+        },
+        {
+            "target": "_blank",
+            "text": "The Scout Association",
+            "url": "http://www.scouts.org.uk/"
+        }
+    ],
+    "copyright": "All Rights Reserved."
 }

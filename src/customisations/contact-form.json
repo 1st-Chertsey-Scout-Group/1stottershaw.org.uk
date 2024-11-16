@@ -1,12 +1,12 @@
 {
-  "namePlaceholder": "",
-  "nameLabel": "",
-  "messagePlaceholder": "",
-  "messageLabel": "",
-  "button": "",
-  "emailPlaceholder": "",
-  "subtitle": "",
-  "emailLabel": "",
-  "title": "",
-  "privacyNotice": ""
+  "namePlaceholder": "Bear Grylls",
+  "nameLabel": "Name",
+  "messagePlaceholder": "Your message...",
+  "messageLabel": "Message",
+  "button": "Send Message",
+  "emailPlaceholder": "bear.grylls@scouts.org.uk",
+  "subtitle": "If you're looking to get in touch, show interest in joining, or volunteer with us, simply complete the form below. We'll reach out to you shortly!",
+  "emailLabel": "Email",
+  "title": "Get in Touch",
+  "privacyNotice": "We'll never share your details."
 }
