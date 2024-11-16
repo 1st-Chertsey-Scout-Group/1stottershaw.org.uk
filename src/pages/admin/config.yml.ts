@@ -60,6 +60,7 @@ export async function GET() {
     backend = {
       name: "github",
       repo: `${githubUser}/${githubRepo}`,
+      branch: "release",
     };
   }
 
