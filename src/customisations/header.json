@@ -1,18 +1,23 @@
 {
     "links": [
         {
-            "text": "Sections",
+            "text": "Our Sections",
             "url": "/#sections",
             "target": "_self"
         },
         {
-            "text": "Address",
+            "text": "Find Us",
             "url": "/#address",
             "target": "_self"
         },
         {
-            "text": "Contact",
+            "text": "Get in Touch",
             "url": "/#contact",
+            "target": "_self"
+        },
+        {
+            "text": "Our History",
+            "url": "/our-history",
             "target": "_self"
         }
     ]
