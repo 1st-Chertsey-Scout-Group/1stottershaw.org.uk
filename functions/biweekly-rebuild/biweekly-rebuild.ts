@@ -6,7 +6,7 @@ declare var process: {
   };
 };
 
-export const handler = schedule("15 8 1,15 * *", async (event) => {
+export const handler = schedule("15 8 1,15 * *", async (_) => {
   if (
     process.env.NETLIFY_REBUILD_HOOK == undefined ||
     process.env.NETLIFY_REBUILD_HOOK.trim() == ""

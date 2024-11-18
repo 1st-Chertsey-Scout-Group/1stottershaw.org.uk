@@ -8,6 +8,7 @@ import {
 interface ContactForm {
   email: string;
   name: string;
+  subject: string;
   message: string;
   number?: string;
 }
@@ -21,7 +22,7 @@ declare var process: {
   };
 };
 
-export const handler: Handler = async (event: HandlerEvent, context) => {
+export const handler: Handler = async (event: HandlerEvent, _) => {
   const form = event.queryStringParameters as unknown as ContactForm;
 
   if (
@@ -63,6 +64,7 @@ export const handler: Handler = async (event: HandlerEvent, context) => {
   if (
     isInvalid(form.email) ||
     isInvalid(form.name) ||
+    isInvalid(form.subject) ||
     isInvalid(form.message)
   ) {
     return errorResponse(process.env.DOMAIN);
@@ -99,7 +101,7 @@ async function sendEmail(
   const message: EmailMessage = {
     senderAddress: EMAIL_SENDER,
     content: {
-      subject: "New Website Enquiry",
+      subject: `New Website Enquiry (${form.subject})`,
       html: emailBody(form),
     },
     recipients: {
@@ -145,7 +147,7 @@ function isInvalid(str: string | undefined | null): boolean {
   return str == undefined || str == null || str.trim() == "";
 }
 
-function emailBody({ email, message, name }: ContactForm) {
+function emailBody({ email, message, name, subject }: ContactForm) {
   return `
   <!doctype html>
 <html>
@@ -233,6 +235,38 @@ function emailBody({ email, message, name }: ContactForm) {
                           style="background-color:#FAFAFA;font-weight:normal;padding:16px 24px 16px 24px"
                         >
                           ${email}
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div style="padding:16px 24px 16px 24px">
+                <table
+                  align="center"
+                  width="100%"
+                  cellpadding="0"
+                  border="0"
+                  style="table-layout:fixed;border-collapse:collapse"
+                >
+                  <tbody style="width:100%">
+                    <tr style="width:100%">
+                      <td
+                        style="box-sizing:content-box;vertical-align:top;padding-left:0;padding-right:8px;width:150px"
+                      >
+                        <h3
+                          style="font-weight:bold;text-align:right;margin:0;font-size:20px;padding:16px 24px 16px 24px"
+                        >
+                          Subject:
+                        </h3>
+                      </td>
+                      <td
+                        style="box-sizing:content-box;vertical-align:top;padding-left:8px;padding-right:0"
+                      >
+                        <div
+                          style="background-color:#FAFAFA;font-weight:normal;padding:16px 24px 16px 24px"
+                        >
+                        ${subject}
                         </div>
                       </td>
                     </tr>

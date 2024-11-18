@@ -35,7 +35,7 @@ import { githubRepo, githubUser } from "@/customisations/site.json";
         "primary-foreground": primaryForeground,
       }}
     ></style>
-    <script define:vars={{ githubRepo, githubUser }}>
+    <script is:inline define:vars={{ githubRepo, githubUser }}>
       console.log(`=====================================================================
 If you're here, you're clearly prepared to dive into the code! We're always 
 striving to make this website better - and we'd love your help! 

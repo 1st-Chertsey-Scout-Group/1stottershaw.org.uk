@@ -1,19 +1,28 @@
 ---
-import { cn } from "@/lib/utils";
+import { Asterisk } from "lucide-react";
 
 interface Props {
   id: string;
-  type: "email" | "text";
+  type: "email" | "text" | "date";
   label: string;
+  required: boolean;
   placeholder: string;
 }
 
-const { id, type, label, placeholder }: Props = Astro.props;
+const { id, type, label, placeholder, required }: Props = Astro.props;
 ---
 
 <div>
   <label for={id} class="block mb-2 font-medium">
-    {label}
+    <span class="inline-block">{label}</span>
+    {
+      required && (
+        <span class="inline-block">
+          <span class="sr-only">required</span>
+          <Asterisk aria-hidden="true" className="text-primary w-4 h-4" />
+        </span>
+      )
+    }
   </label>
   <input
     type={type}
@@ -21,6 +30,6 @@ const { id, type, label, placeholder }: Props = Astro.props;
     name={id}
     class="block p-2.5 w-full rounded-lg bg-input text-input-foreground border border-input-border focus:ring-1 focus:ring-primary"
     placeholder={placeholder}
-    required
+    required={required}
   />
 </div>

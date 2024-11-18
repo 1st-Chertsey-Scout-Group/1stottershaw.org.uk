@@ -1,6 +1,7 @@
 ---
 import { SendHorizonalIcon } from "lucide-react";
 import FormTextBox from "./ui/form-text-box.astro";
+import FormSelect from "./ui/form-select.astro";
 import FormTextArea from "./ui/form-text-area.astro";
 import BlockElement from "./block/block-element.astro";
 
@@ -11,6 +12,8 @@ import {
   messagePlaceholder,
   nameLabel,
   namePlaceholder,
+  subjectLabel,
+  subjectOptions,
   button,
   subtitle,
   title,
@@ -31,6 +34,7 @@ import Button from "./ui/button.astro";
         type="email"
         label={emailLabel}
         placeholder={emailPlaceholder}
+        required={true}
       />
 
       <FormTextBox
@@ -38,6 +42,14 @@ import Button from "./ui/button.astro";
         type="text"
         label={nameLabel}
         placeholder={namePlaceholder}
+        required={true}
+      />
+
+      <FormSelect
+        id="subject"
+        label={subjectLabel}
+        required={true}
+        options={subjectOptions}
       />
 
       <input class="hidden" name="number" />
@@ -46,6 +58,7 @@ import Button from "./ui/button.astro";
         id="message"
         label={messageLabel}
         placeholder={messagePlaceholder}
+        required={true}
       />
 
       <Button Icon={SendHorizonalIcon} type="submit" text={button} />

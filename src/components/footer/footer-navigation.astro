@@ -9,11 +9,10 @@ import {
   logoAlt,
   groupName,
   charityNumber,
-  footerText,
 } from "@/customisations/site.json";
 import FooterLinkItem from "./footer-link-item.astro";
 
-import { links, copyright } from "@/customisations/footer.json";
+import { links, copyright, subtitle } from "@/customisations/footer.json";
 ---
 
 <footer class="p-4 md:p-8 lg:p-10">
@@ -30,7 +29,7 @@ import { links, copyright } from "@/customisations/footer.json";
       />
       {groupName}
     </a>
-    <p class="my-6">{footerText}</p>
+    <p class="my-6">{subtitle}</p>
     <ul class="flex flex-wrap justify-center items-center mb-6">
       {
         links &&

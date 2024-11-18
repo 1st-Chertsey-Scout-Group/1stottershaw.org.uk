@@ -8,5 +8,7 @@
   "subtitle": "If you're looking to get in touch, show interest in joining, or volunteer with us, simply complete the form below. We'll reach out to you shortly!",
   "emailLabel": "Email",
   "title": "Get in Touch",
-  "privacyNotice": "We'll never share your details."
+  "privacyNotice": "We'll never share your details.",
+  "subjectLabel": "",
+  "subjectOptions": []
 }

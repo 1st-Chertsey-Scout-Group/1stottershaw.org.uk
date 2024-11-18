@@ -1,19 +1,25 @@
 ---
 import { Asterisk } from "lucide-react";
 
+interface Option {
+  label: string;
+}
+
 interface Props {
   id: string;
   label: string;
-  placeholder: string;
   required: boolean;
+  options: Option[];
 }
 
-const { id, label, placeholder, required }: Props = Astro.props;
+const { id, label, required, options }: Props = Astro.props;
 ---
 
 <div>
   <label for={id} class="block mb-2 font-medium">
-    <span class="inline-block">{label}</span>
+    <span class="inline-block">
+      {label}
+    </span>
     {
       required && (
         <span class="inline-block">
@@ -23,11 +29,22 @@ const { id, label, placeholder, required }: Props = Astro.props;
       )
     }
   </label>
-  <textarea
+  <select
     id={id}
-    rows="6"
     name={id}
     class="block p-2.5 w-full rounded-lg bg-input text-input-foreground border border-input-border focus:ring-1 focus:ring-primary"
-    placeholder={placeholder}
-    required={required}></textarea>
+    required={required}
+  >
+    {
+      options &&
+        options.map((option) => (
+          <option
+            value={option.label}
+            label={option.label}
+          >
+            {option.label}
+          </option>
+        ))
+    }
+  </select>
 </div>

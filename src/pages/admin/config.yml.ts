@@ -310,6 +310,28 @@ export async function GET() {
                 hint: `Placeholder text for the name field, ${placeholderMaxLength} characters max.`,
               },
               {
+                label: "Subject Label",
+                name: "sujectLabel",
+                widget: "string",
+                pattern: labelValidation,
+                hint: `Label text for the subject field, ${labelMaxLength} characters max.`,
+              },
+              {
+                label: "Subject Options",
+                name: "subjectOptions",
+                widget: "list",
+                allow_add: true,
+                fields: [
+                  {
+                    label: "Label",
+                    name: "label",
+                    widget: "string",
+                    pattern: labelValidation,
+                    hint: `Label text for the option, ${labelMaxLength} characters max.`,
+                  },
+                ],
+              },
+              {
                 label: "Message Label",
                 name: "messageLabel",
                 widget: "string",
@@ -355,7 +377,7 @@ export async function GET() {
                     name: "text",
                     widget: "string",
                     pattern: labelValidation,
-                    hint: `Label text for the link, ${buttonMaxLength} characters max.`,
+                    hint: `Label text for the link, ${labelMaxLength} characters max.`,
                   },
                   {
                     label: "Url",
@@ -382,6 +404,13 @@ export async function GET() {
                 widget: "string",
                 pattern: labelValidation,
                 hint: `Copyright text at the bottom of the page, ${buttonMaxLength} characters max.`,
+              },
+              {
+                label: "Subtitle",
+                name: "subtitle",
+                widget: "string",
+                pattern: subTitleValidation,
+                hint: `Text for the footer section, up to ${subtitleMaxLength} characters.`,
               },
             ],
           },
@@ -538,13 +567,6 @@ export async function GET() {
                 widget: "string",
                 pattern: altTextValidation,
                 hint: `Describe the logo for accessibility, up to ${altTextMaxLength} characters.`,
-              },
-              {
-                label: "Footer Text",
-                name: "footerText",
-                widget: "string",
-                pattern: subTitleValidation,
-                hint: `Text for the footer section, up to ${subtitleMaxLength} characters.`,
               },
               {
                 label: "Charity Number",
