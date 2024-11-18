@@ -9,6 +9,10 @@
   "emailLabel": "Email",
   "title": "Get in Touch",
   "privacyNotice": "We'll never share your details.",
-  "subjectLabel": "",
-  "subjectOptions": []
+  "subjectLabel": "Subject",
+  "subjectOptions": [
+    {
+      "label": "General Enquiry"
+    }
+  ]
 }
