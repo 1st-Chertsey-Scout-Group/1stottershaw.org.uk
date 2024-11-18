@@ -20,3 +20,8 @@
   from = "/functions/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+[[redirects]]
+from = "/*"
+to = "/page-not-found"
+status = 404

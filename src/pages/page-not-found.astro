@@ -1,0 +1,17 @@
+---
+import PageLayout from "@/layouts/page.layout.astro";
+
+import { title } from "@/customisations/404.json";
+import Error404 from "@/components/errors/Error404.astro";
+import HeaderNavigation from "@/components/header/header-navigation.astro";
+import FooterNavigation from "@/components/footer/footer-navigation.astro";
+---
+
+<PageLayout title={title}>
+  <HeaderNavigation />
+  <Error404 />
+
+  <div class="bg-alternative text-alternative-foreground">
+    <FooterNavigation />
+  </div>
+</PageLayout>
