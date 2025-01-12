@@ -1,0 +1,23 @@
+---
+import { SendHorizonal } from "lucide-react";
+import { Block, Button } from "basecamp/components";
+---
+
+<Block.Wrapper id="sections" variant="primary" className="py-8">
+    <Block.Header slot="header">
+        Want to get involved with Ottershaw?
+    </Block.Header>
+    <Block.SubHeader slot="subHeader">
+        If you want to get involved with Scouting as volunteer or gain skills
+        for life as a Beaver, Cub or Scout why not 1st Ottershaw Scout Group
+    </Block.SubHeader>
+    <Block.Body slot="body" size="sm" className="mb-0 lg:mb-0">
+        <a href="/#contact" class="w-full">
+            <Button
+                Icon={SendHorizonal}
+                type="button"
+                text="Send us a message"
+            />
+        </a>
+    </Block.Body>
+</Block.Wrapper>

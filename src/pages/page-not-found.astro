@@ -1,0 +1,30 @@
+---
+import { Block, Button, Seperator } from "basecamp/components";
+import PageLayout from "../layouts/page.layout.astro";
+import { ArrowLeft } from "lucide-react";
+---
+
+<PageLayout title="Page not found">
+    <Block.Wrapper id="page-not-found">
+        <Block.Seperator slot="seperator">
+            <Seperator loading="eager" />
+        </Block.Seperator>
+        <Block.Header slot="header" className="text-primary">
+            Page not found
+        </Block.Header>
+        <Block.SubHeader slot="subHeader">
+            Sorry, we can't find that page. You'll find lots to explore on the
+            home page.
+        </Block.SubHeader>
+        <Block.Body slot="body" size="md">
+            <a href="/" class="block mt-8 w-full">
+                <Button
+                    Icon={ArrowLeft}
+                    type="button"
+                    text="Back to our site"
+                    iconClassName="order-first"
+                />
+            </a>
+        </Block.Body>
+    </Block.Wrapper>
+</PageLayout>

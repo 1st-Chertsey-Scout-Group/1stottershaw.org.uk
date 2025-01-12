@@ -1,0 +1,29 @@
+---
+import { Block, Button, Seperator } from "basecamp/components";
+import PageLayout from "../layouts/page.layout.astro";
+import { ArrowLeft } from "lucide-react";
+---
+
+<PageLayout title="Thank you!">
+    <Block.Wrapper id="page-not-found">
+        <Block.Seperator slot="seperator">
+            <Seperator loading="eager" />
+        </Block.Seperator>
+        <Block.Header slot="header" className="text-primary">
+            Thank you!
+        </Block.Header>
+        <Block.SubHeader slot="subHeader">
+            Your form submission has been received.
+        </Block.SubHeader>
+        <Block.Body slot="body" size="md">
+            <a href="/" class="block mt-8 w-full">
+                <Button
+                    Icon={ArrowLeft}
+                    type="button"
+                    text="Back to our site"
+                    iconClassName="order-first"
+                />
+            </a>
+        </Block.Body>
+    </Block.Wrapper>
+</PageLayout>

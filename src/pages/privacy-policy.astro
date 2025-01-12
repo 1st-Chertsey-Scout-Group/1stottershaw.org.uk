@@ -1,0 +1,118 @@
+---
+import { Block, Button, Seperator } from "basecamp/components";
+import  PageLayout from "../layouts/page.layout.astro";
+import { ArrowLeft } from "lucide-react";
+---
+
+<PageLayout title="Privacy Policy">
+    <Block.Wrapper id="privacy-policy">
+        <Block.Seperator slot="seperator">
+            <Seperator loading="eager" />
+        </Block.Seperator>
+        <Block.Header slot="header" className="text-primary">
+            Privacy Policy
+        </Block.Header>
+        <Block.Body slot="body" size="md">
+            <p class="mb-2">
+                1st Ottershaw takes your privacy seriously. To better protect your
+                privacy we provide this privacy policy notice explaining the way
+                your personal information is collected and used.
+            </p>
+
+            <h3 class="text-3xl mb-2 mt-8">
+                Collection of Routine Information
+            </h3>
+
+            <p class="mb-2">
+                This website track basic information about their visitors. This
+                information includes, but is not limited to, IP addresses,
+                browser details, timestamps and referring pages. None of this
+                information can personally identify specific visitors to this
+                website. The information is tracked for routine administration
+                and maintenance purposes.
+            </p>
+
+            <h3 class="text-3xl mb-2 mt-8">Cookies</h3>
+
+            <p class="mb-2">
+                Where necessary, this website uses cookies to store information
+                about a visitor's preferences and history in order to better
+                serve the visitor and/or present the visitor with customized
+                content.
+            </p>
+
+            <h3 class="text-3xl mb-2 mt-8">
+                Advertisement and Other Third Parties
+            </h3>
+
+            <p class="mb-2">
+                Advertising partners and other third parties may use cookies,
+                scripts and/or web beacons to track visitors activities on this
+                website in order to display advertisements and other useful
+                information. Such tracking is done directly by the third parties
+                through their own servers and is subject to their own privacy
+                policies. This website has no access or control over these
+                cookies, scripts and/or web beacons that may be used by third
+                parties. Learn how to <a
+                    class="hover:underline underline-offset-2 text-primary"
+                    href="http://www.google.com/privacy_ads.html"
+                    >opt out of Google's cookie usage</a
+                >.
+            </p>
+
+            <h3 class="text-3xl mb-2 mt-8">Links to Third Party Websites</h3>
+
+            <p class="mb-2">
+                we have included links on this website for your use and
+                reference. we are not responsible for the privacy policies on
+                these websites. You should be aware that the privacy policies of
+                these websites may differ from our own.
+            </p>
+
+            <h3 class="text-3xl mb-2 mt-8">Security</h3>
+
+            <p class="mb-2">
+                The security of your personal information is important to us,
+                but remember that no method of transmission over the Internet,
+                or method of electronic storage, is 100% secure. While we strive
+                to use commercially acceptable means to protect your personal
+                information, we cannot guarantee its absolute security.
+            </p>
+
+            <h3 class="text-3xl mb-2 mt-8">Changes To This Privacy Policy</h3>
+
+            <p class="mb-2">
+                This Privacy Policy is effective as of 14th November 2024 and
+                will remain in effect except with respect to any changes in its
+                provisions in the future, which will be in effect immediately
+                after being posted on this page.
+            </p>
+
+            <p class="mb-2">
+                we reserve the right to update or change our Privacy Policy at
+                any time and you should check this Privacy Policy periodically.
+                If we make any material changes to this Privacy Policy, we will
+                notify you either through the email address you have provided
+                us, or by placing a prominent notice on our website.
+            </p>
+
+            <h3 class="text-3xl mb-2 mt-8">Contact Information</h3>
+
+            <p class="mb-2">
+                For any questions or concerns regarding the privacy policy,
+                please send us a message via our <a
+                    class="hover:underline underline-offset-2 text-primary"
+                    href="/#contact">contact form</a
+                >.
+            </p>
+            <a href="/" class="block mt-8 w-full">
+                <Button
+                    Icon={ArrowLeft}
+                    type="button"
+                    text="Back to website"
+                    iconClassName="order-first"
+                />
+            </a>
+        </Block.Body>
+    </Block.Wrapper>
+</PageLayout>
