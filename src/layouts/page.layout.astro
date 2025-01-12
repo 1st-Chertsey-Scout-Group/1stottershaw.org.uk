@@ -1,0 +1,53 @@
+---
+import { PageLayout } from "basecamp/layouts";
+
+import logo from "../images/group-badge.png";
+
+import { HeaderNavigation, FooterNavigation, Block } from "basecamp/components";
+import { HEADER_LINKS } from "@/lib/navigation";
+import { FOOTER_LINKS } from "@/lib/navigation";
+
+const currentPath = Astro.url.pathname;
+
+interface Props {
+    title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<PageLayout
+    theme={{ primary: "#000066", primaryForeground: "#ffffff" }}
+    title={title}
+    seo={{
+        title: "1st Ottershaw Scout Group",
+        description:
+            "1st Ottershaw Scout Group offers adventure, skill-building, and friendship for young people in Ottershaw, Surrey. With sections for Beavers (6-8), Cubs (8-10½), and Scouts (10½-14), we provide fun, challenging activities that help youth grow in confidence and make a positive impact. Join us for exciting experiences, volunteer opportunities, or to learn more about scouting. Located at Ottershaw Memorial Fields.",
+    }}
+>
+    <main>
+        <HeaderNavigation
+            name="1st Ottershaw"
+            logo={logo}
+            logoAlt="Logo for 1st Ottershaw"
+            links={HEADER_LINKS}
+            currentPath={currentPath}
+        />
+
+        <slot />
+
+        <Block.Wrapper id="footer" variant="alternative">
+            <Block.Body slot="body" size="xl">
+                <FooterNavigation
+                    links={FOOTER_LINKS}
+                    logo={logo}
+                    logoAlt="1st Ottershaw Logo"
+                    charityNumber={3997492}
+                    name="1st Ottershaw Scout Group"
+                    subtitle="Shaping the lives of countless young people across generations."
+                    copyright="All Rights Reserved."
+                />
+            </Block.Body>
+        </Block.Wrapper>
+    </main>
+</PageLayout>

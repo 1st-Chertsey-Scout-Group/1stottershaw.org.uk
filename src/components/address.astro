@@ -1,0 +1,21 @@
+---
+import { Block, Seperator, GoogleMap } from "basecamp/components";
+---
+
+<Block.Wrapper id="address" variant="alternative">
+    <Block.Seperator slot="seperator">
+        <Seperator loading="lazy" />
+    </Block.Seperator>
+    <Block.Header slot="header" className="text-primary">
+        Find Us
+    </Block.Header>
+    <Block.SubHeader slot="subHeader">
+        The Holt, Ottershaw Memorial Fields, Ottershaw, Chertsey KT16 0QB.
+    </Block.SubHeader>
+    <Block.Body slot="body" size="md">
+        <GoogleMap
+            mapUrl="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1245.4989158107119!2d-0.5406706260013218!3d51.36633655285768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487677c007163d4f%3A0x5fe8f3f75a97fdff!2sOttershaw%20Memorial%20Fields!5e0!3m2!1sen!2suk!4v1731774993489!5m2!1sen!2suk"
+            mapTitle="Google Maps for 1st Ottershaw Scout Group"
+        />
+    </Block.Body>
+</Block.Wrapper>

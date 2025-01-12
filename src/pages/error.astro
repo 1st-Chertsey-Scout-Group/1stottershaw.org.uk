@@ -1,0 +1,29 @@
+---
+import { Block, Button, Seperator } from "basecamp/components";
+import PageLayout from "../layouts/page.layout.astro";
+import { ArrowLeft } from "lucide-react";
+---
+
+<PageLayout title="Something went wrong">
+    <Block.Wrapper id="page-not-found">
+        <Block.Seperator slot="seperator">
+            <Seperator loading="eager" />
+        </Block.Seperator>
+        <Block.Header slot="header" className="text-primary">
+            Something went wrong
+        </Block.Header>
+        <Block.SubHeader slot="subHeader">
+            We were unable to process your request, please try again later.
+        </Block.SubHeader>
+        <Block.Body slot="body" size="md">
+            <a href="/" class="block mt-8 w-full">
+                <Button
+                    Icon={ArrowLeft}
+                    type="button"
+                    text="Back to our site"
+                    iconClassName="order-first"
+                />
+            </a>
+        </Block.Body>
+    </Block.Wrapper>
+</PageLayout>
