@@ -1,154 +1,187 @@
 import { type Handler, type HandlerEvent } from "@netlify/functions";
-import {
-    EmailClient,
-    type EmailMessage,
-    type EmailSendResponse,
-} from "@azure/communication-email";
+import nodemailer from 'nodemailer';
+
 
 interface ContactForm {
-    email: string;
-    name: string;
-    subject: string;
-    message: string;
-    number?: string;
+  email: string;
+  name: string;
+  subject: string;
+  message: string;
+  number?: string;
 }
 
 declare var process: {
-    env: {
-        EMAIL_CONNECTION_STRING: string;
-        EMAIL_RECIPIENTS: string;
-        EMAIL_SENDER: string;
-        DOMAIN: string;
-    };
+  env: {
+    EMAIL_HOST: string;
+    EMAIL_PORT: number;
+    EMAIL_DOMAIN: string;
+    EMAIL_USER: string;
+    EMAIL_PASSWORD: string;
+  };
 };
 
 export const handler: Handler = async (event: HandlerEvent, _) => {
-    const form = event.queryStringParameters as unknown as ContactForm;
+  const form = event.queryStringParameters as unknown as ContactForm;
 
-    if (
-        process.env.EMAIL_CONNECTION_STRING == undefined ||
-        process.env.EMAIL_CONNECTION_STRING.trim() == ""
-    ) {
-        return errorResponse(process.env.DOMAIN);
-    }
+  if (!environmentVariablesAreConfigured()) {
+    return {
+      statusCode: 302,
+      headers: {
+        location: `https://${process.env.EMAIL_DOMAIN}/error?1`,
+      },
+    };
+  }
 
-    if (
-        process.env.EMAIL_RECIPIENTS == undefined ||
-        process.env.EMAIL_RECIPIENTS.trim() == ""
-    ) {
-        return errorResponse(process.env.DOMAIN);
-    }
+  if (!requestFromAValidDomain(event)) {
+    return {
+      statusCode: 302,
+      headers: {
+        location: `https://${process.env.EMAIL_DOMAIN}/error?2`,
+      },
+    };
+  }
 
-    if (
-        process.env.EMAIL_SENDER == undefined ||
-        process.env.EMAIL_SENDER.trim() == ""
-    ) {
-        return errorResponse(process.env.DOMAIN);
-    }
 
-    if (process.env.DOMAIN == undefined || process.env.DOMAIN.trim() == "") {
-        return errorResponse(process.env.DOMAIN);
-    }
+  if (!isInvalid(form.number)) {
+    return {
+      statusCode: 302,
+      headers: {
+        location: `https://${process.env.EMAIL_DOMAIN}/error?3`,
+      },
+    };
+  }
 
-    if (
-        event.headers["referer"] == undefined ||
-        !event.headers["referer"].includes(process.env.DOMAIN)
-    ) {
-        return errorResponse(process.env.DOMAIN);
-    }
+  if (
+    isInvalid(form.email) ||
+    isInvalid(form.name) ||
+    isInvalid(form.subject) ||
+    isInvalid(form.message)
+  ) {
+    return {
+      statusCode: 302,
+      headers: {
+        location: `https://${process.env.EMAIL_DOMAIN}/error?4`,
+      },
+    };
+  }
 
-    if (!isInvalid(form.number)) {
-        return errorResponse(process.env.DOMAIN);
-    }
+  const sent = await sendEmail(
+    form,
+    process.env.EMAIL_HOST,
+    process.env.EMAIL_PORT,
+    process.env.EMAIL_DOMAIN,
+    process.env.EMAIL_USER,
+    process.env.EMAIL_PASSWORD
+  );
 
-    if (
-        isInvalid(form.email) ||
-        isInvalid(form.name) ||
-        isInvalid(form.subject) ||
-        isInvalid(form.message)
-    ) {
-        return errorResponse(process.env.DOMAIN);
-    }
+  if (!sent) {
+    return {
+      statusCode: 302,
+      headers: {
+        location: `https://${process.env.EMAIL_DOMAIN}/error?5`,
+      },
+    };
+  }
 
-    const sent = await sendEmail(
-        form,
-        process.env.EMAIL_CONNECTION_STRING,
-        process.env.EMAIL_RECIPIENTS,
-        process.env.EMAIL_SENDER,
-    );
-
-    if (!sent) {
-        return errorResponse(process.env.DOMAIN);
-    }
-
-    return successResponse(process.env.DOMAIN);
+  return {
+    statusCode: 200,
+    headers: {
+      location: `https://${process.env.EMAIL_DOMAIN}/success`,
+    },
+  };;
 };
 
+function environmentVariablesAreConfigured(): boolean {
+
+  if (
+    process.env.EMAIL_HOST == undefined ||
+    process.env.EMAIL_HOST.trim() == ""
+  ) {
+    return false;
+  }
+
+  if (
+    process.env.EMAIL_USER == undefined ||
+    process.env.EMAIL_USER.trim() == ""
+  ) {
+    return false;
+  }
+
+
+  if (
+    process.env.EMAIL_PASSWORD == undefined ||
+    process.env.EMAIL_PASSWORD.trim() == ""
+  ) {
+    return false;
+  }
+
+  if (
+    process.env.EMAIL_PORT == undefined ||
+    !isNumber(process.env.EMAIL_PORT)
+  ) {
+    return false;
+  }
+
+  if (process.env.EMAIL_DOMAIN == undefined || process.env.EMAIL_DOMAIN.trim() == "") {
+    return false;
+  }
+
+  return true;
+}
+
+function requestFromAValidDomain(event: HandlerEvent): boolean {
+  if (
+    event.headers["referer"] == undefined ||
+    !event.headers["referer"].includes(process.env.EMAIL_DOMAIN)
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
 async function sendEmail(
-    form: ContactForm,
-    EMAIL_CONNECTION_STRING: string,
-    EMAIL_RECIPIENTS: string,
-    EMAIL_SENDER: string,
+  form: ContactForm,
+  EMAIL_HOST: string,
+  EMAIL_PORT: number,
+  EMAIL_DOMAIN: string,
+  EMAIL_USER: string,
+  EMAIL_PASSWORD: string,
 ) {
-    const client = new EmailClient(EMAIL_CONNECTION_STRING);
 
-    const recipients = EMAIL_RECIPIENTS.split(",").map((recipient) => {
-        return {
-            address: recipient,
-        };
-    });
+  const transporter = nodemailer.createTransport({
+    host: EMAIL_HOST,
+    port: EMAIL_PORT,
+    secure: true,
+    auth: {
+      user: EMAIL_USER,
+      pass: EMAIL_PASSWORD
+    },
+  });
 
-    const message: EmailMessage = {
-        senderAddress: EMAIL_SENDER,
-        content: {
-            subject: `New Website Enquiry (${form.subject})`,
-            html: emailBody(form),
-        },
-        recipients: {
-            to: [...recipients],
-        },
-    };
+  var message = await transporter.sendMail({
+    from: EMAIL_USER,
+    to: `${form.subject}@${EMAIL_DOMAIN}`,
+    subject: `${EMAIL_DOMAIN.toUpperCase()} Website Enquiry (${form.subject})`,
+    html: emailBody(form)
+  });
 
-    const poller = await client.beginSend(message);
-    const response: EmailSendResponse = await poller.pollUntilDone();
+  return true;
 
-    switch (response.status) {
-        case "NotStarted":
-        case "Running":
-        case "Failed":
-        case "Canceled":
-            return false;
-        case "Succeeded":
-            return true;
-        default:
-            throw new Error("Unknown status");
-    }
-}
-
-function errorResponse(domain: string) {
-    return {
-        statusCode: 302,
-        headers: {
-            location: `${domain}/error`,
-        },
-    };
-}
-
-function successResponse(domain: string) {
-    return {
-        statusCode: 302,
-        headers: {
-            location: `${domain}/success`,
-        },
-    };
 }
 
 function isInvalid(str: string | undefined | null): boolean {
-    return str == undefined || str == null || str.trim() == "";
+  return str == undefined || str == null || str.trim() == "";
+}
+
+function isNumber(value?: string | number): boolean {
+  return ((value != null) &&
+    (value !== '') &&
+    !isNaN(Number(value.toString())));
 }
 
 function emailBody({ email, message, name, subject }: ContactForm) {
-    return `
+  return `
   <!doctype html>
 <html>
   <body>
