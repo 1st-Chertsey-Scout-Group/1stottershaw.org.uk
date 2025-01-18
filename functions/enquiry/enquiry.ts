@@ -163,13 +163,14 @@ async function sendEmail(
       },
     });
 
-    transporter.sendMail({
+    let message = await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: `${form.subject}@${process.env.EMAIL_DOMAIN}`,
       subject: `New Submission - ${process.env.EMAIL_DOMAIN}`,
       html: emailBody(form, process.env.EMAIL_DOMAIN)
     });
 
+    console.debug(message.response);
     return true;
   } catch (error) {
     console.error(error);
