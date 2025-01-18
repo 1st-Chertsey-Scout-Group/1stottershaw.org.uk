@@ -52,27 +52,29 @@ export const handler: Handler = async (event: HandlerEvent, _) => {
 };
 
 function processEnquiry(event: HandlerEvent): Promise<string> {
-
   return new Promise(async (resolve, reject) => {
 
     const form = event.queryStringParameters as unknown as ContactForm;
 
+    console.debug("Checking environment variables")
     if (!environmentVariablesAreConfigured()) {
       reject("Environment variables are not configured");
       return;
     }
 
+    console.debug("Checking request is from a valid domain")
     if (!requestFromAValidDomain(event)) {
       reject("Request not from a valid domain");
       return;
     }
 
-
+    console.debug("Checking the form doesn't have the bot honeypot set")
     if (!isInvalid(form.number)) {
       reject("Potential bot");
       return;
     }
 
+    console.debug("Checking the form has been fully filled out")
     if (
       isInvalid(form.email) ||
       isInvalid(form.name) ||
@@ -83,18 +85,34 @@ function processEnquiry(event: HandlerEvent): Promise<string> {
       return;
     }
 
-    const sent = await sendEmail(
-      form
-    );
+    try {
+      const transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD
+        },
+      });
 
-    if (!sent) {
+      console.debug(`sending the email to ${form.subject}@${process.env.EMAIL_DOMAIN}`);
+      let message = await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: `${form.subject}@${process.env.EMAIL_DOMAIN}`,
+        subject: `New Submission - ${process.env.EMAIL_DOMAIN}`,
+        html: emailBody(form, process.env.EMAIL_DOMAIN)
+      });
+
+      console.debug(message.response);
+      resolve("Successfully sent the email");
+      return;
+
+    } catch (error) {
+      console.error(error);
       reject("Email didnt sent.");
       return;
     }
-
-
-    resolve("Successfully sent the email");
-    return;
   });
 
 }
@@ -148,37 +166,6 @@ function requestFromAValidDomain(event: HandlerEvent): boolean {
   return true;
 }
 
-async function sendEmail(
-  form: ContactForm,
-) {
-
-  try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD
-      },
-    });
-
-    let message = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: `${form.subject}@${process.env.EMAIL_DOMAIN}`,
-      subject: `New Submission - ${process.env.EMAIL_DOMAIN}`,
-      html: emailBody(form, process.env.EMAIL_DOMAIN)
-    });
-
-    console.debug(message.response);
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-
-
-}
 
 function isInvalid(str: string | undefined | null): boolean {
   return str == undefined || str == null || str.trim() == "";
