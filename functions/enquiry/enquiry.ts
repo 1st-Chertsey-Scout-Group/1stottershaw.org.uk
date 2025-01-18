@@ -23,8 +23,8 @@ declare var process: {
 export const handler: Handler = async (event: HandlerEvent, _) => {
 
   processEnquiry(event)
-    .then((message) => console.log(message))
-    .catch((error) => console.log(error));
+    .then((message) => console.info(message))
+    .catch((error) => console.error(error));
 
   return {
     statusCode: 200,
@@ -138,7 +138,6 @@ function environmentVariablesAreConfigured(): boolean {
 }
 
 function requestFromAValidDomain(event: HandlerEvent): boolean {
-  return true;
   if (
     event.headers["referer"] == undefined ||
     !event.headers["referer"].includes(process.env.EMAIL_DOMAIN)
