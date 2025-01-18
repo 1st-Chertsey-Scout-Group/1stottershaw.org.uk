@@ -152,24 +152,30 @@ async function sendEmail(
   form: ContactForm,
 ) {
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD
-    },
-  });
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+      },
+    });
 
-  transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: `${form.subject}@${process.env.EMAIL_DOMAIN}`,
-    subject: `New Submission - ${process.env.EMAIL_DOMAIN}`,
-    html: emailBody(form, process.env.EMAIL_DOMAIN)
-  });
+    transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: `${form.subject}@${process.env.EMAIL_DOMAIN}`,
+      subject: `New Submission - ${process.env.EMAIL_DOMAIN}`,
+      html: emailBody(form, process.env.EMAIL_DOMAIN)
+    });
 
-  return true;
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+
 
 }
 
