@@ -1,14 +1,26 @@
 ---
+import { getCollection, type CollectionEntry } from "astro:content";
 import { Block, Form } from "basecamp/components";
+import type { Option } from "basecamp/models";
+
+const sections: Option[] = (await getCollection("sections")).map((g) => {
+    return { type: "option", label: g.data.name, id: g.slug };
+});
 ---
 
 <Block.Wrapper id="contact">
     <Block.Header slot="header"> Get in Touch</Block.Header>
     <Block.SubHeader slot="subHeader">
-        If you're looking to get in touch, show interest in joining, or volunteer with us, simply complete the form below. We'll reach out to you shortly!
+        If you're looking to get in touch, show interest in joining, or
+        volunteer with us, simply complete the form below. We'll reach out to
+        you shortly!
     </Block.SubHeader>
     <Block.Body slot="body" size="md">
-        <Form.Wrapper name="contact" action="/functions/enquiry" button="Send Message">
+        <Form.Wrapper
+            name="contact"
+            action="/functions/enquiry"
+            button="Send Message"
+        >
             <Form.TextBox
                 id="email"
                 type="email"
@@ -29,7 +41,14 @@ import { Block, Form } from "basecamp/components";
                 id="subject"
                 label="Subject"
                 required={true}
-                options={[{ label: "General Enquiry" }]}
+                options={[
+                    { type: "option", label: "General Enquiry", id: "enquiry" },
+                    {
+                        type: "group",
+                        label: "Sections",
+                        options: sections,
+                    },
+                ]}
             />
 
             <Form.TextArea
