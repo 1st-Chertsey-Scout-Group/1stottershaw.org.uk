@@ -1,7 +1,7 @@
 import { defineCollection, z } from "astro:content";
 
 export const sectionsCollection = defineCollection({
-    type: "data",
+    type: "content",
     schema: ({ image }) =>
         z.object({
             name: z.string(),
