@@ -52,7 +52,7 @@ export const handler: Handler = async (event: HandlerEvent, _) => {
 };
 
 function processEnquiry(event: HandlerEvent): Promise<string> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
 
     const form = event.queryStringParameters as unknown as ContactForm;
 
@@ -85,34 +85,31 @@ function processEnquiry(event: HandlerEvent): Promise<string> {
       return;
     }
 
-    try {
-      const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
-        secure: true,
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASSWORD
-        },
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+      },
+    });
+
+    console.debug(`sending the email to ${form.subject}@${process.env.EMAIL_DOMAIN}`);
+    transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: `${form.subject}@${process.env.EMAIL_DOMAIN}`,
+      subject: `New Submission - ${process.env.EMAIL_DOMAIN}`,
+      html: emailBody(form, process.env.EMAIL_DOMAIN)
+    })
+      .then((message) => {
+        console.debug(message.response);
+        resolve("Sent the email");
+      })
+      .catch((error) => {
+        console.error(error);
+        reject("Email didnt sent.");
       });
-
-      console.debug(`sending the email to ${form.subject}@${process.env.EMAIL_DOMAIN}`);
-      let message = await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: `${form.subject}@${process.env.EMAIL_DOMAIN}`,
-        subject: `New Submission - ${process.env.EMAIL_DOMAIN}`,
-        html: emailBody(form, process.env.EMAIL_DOMAIN)
-      });
-
-      console.debug(message.response);
-      resolve("Successfully sent the email");
-      return;
-
-    } catch (error) {
-      console.error(error);
-      reject("Email didnt sent.");
-      return;
-    }
   });
 
 }
