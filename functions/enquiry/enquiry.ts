@@ -21,8 +21,13 @@ declare var process: {
 };
 
 export const handler: Handler = async (event: HandlerEvent, _) => {
+  if (event.httpMethod != "GET" || event.headers["purpose"] == "prefetch") {
+    return {
+      statusCode: 200
+    }
+  }
 
-  await processEnquiry(event)
+  processEnquiry(event)
     .then((res: SentMessageInfo) => {
       console.debug(res);
       console.debug("email sent")
@@ -144,7 +149,6 @@ function environmentVariablesAreConfigured(): boolean {
 }
 
 function requestFromAValidDomain(event: HandlerEvent): boolean {
-  return true;
   if (
     event.headers["referer"] == undefined ||
     !event.headers["referer"].includes(process.env.EMAIL_DOMAIN)
