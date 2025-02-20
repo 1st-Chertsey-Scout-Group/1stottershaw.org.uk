@@ -16,6 +16,7 @@
 			"onAutoForward": "openBrowser"
 		}
 	},
+	"postCreateCommand": "npm install",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
