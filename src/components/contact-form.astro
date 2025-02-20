@@ -1,62 +1,132 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
-import { Block, Form } from "basecamp/components";
-import type { Option } from "basecamp/models";
+import {
+    getFormData,
+    getOptions,
+    sendEnquiryEmail,
+    isFormDataValid,
+} from "@/code/contact";
+import { Block, Button, Form } from "basecamp/components";
+import {
+    SMTP_HOST,
+    SMTP_PASSWORD,
+    SMTP_PORT,
+    SMTP_ALIAS,
+    SMTP_DOMAIN,
+} from "astro:env/server";
+import { ArrowLeft } from "lucide-react";
 
-const sections: Option[] = (await getCollection("sections")).map((g) => {
-    return { type: "option", label: g.data.name, id: g.slug };
-});
+let response: "form" | "success" | "error" = "form";
+
+let options = await getOptions();
+
+if (Astro.request.method === "POST") {
+    const formData = getFormData(await Astro.request.formData(), options);
+
+    if (isFormDataValid(formData)) {
+        response = "success";
+        sendEnquiryEmail(formData, {
+            SMTP_HOST,
+            SMTP_PASSWORD,
+            SMTP_PORT,
+            SMTP_ALIAS,
+            SMTP_DOMAIN,
+        })
+            .then((v) => {
+                console.log(v.response);
+            })
+            .catch((e) => {
+                console.error(e);
+            });
+    } else {
+        response = "error";
+    }
+}
 ---
 
 <Block.Wrapper id="contact">
-    <Block.Header slot="header"> Get in Touch</Block.Header>
+    <Block.Header slot="header">
+        {response == "success" && <>We have your message</>}
+        {response == "error" && <>Something went wrong</>}
+        {response == "form" && <>Get in Touch</>}
+    </Block.Header>
     <Block.SubHeader slot="subHeader">
-        If you're looking to get in touch, show interest in joining, or
-        volunteer with us, simply complete the form below. We'll reach out to
-        you shortly!
+        {
+            response == "success" && (
+                <>
+                    Thank you for reaching out, we will get back to you as soon
+                    as possible
+                </>
+            )
+        }
+        {
+            response == "error" && (
+                <>
+                    We encountered an issue while processing your request.
+                    Please try again later, and we appreciate your patience.
+                </>
+            )
+        }
+        {
+            response == "form" && (
+                <>
+                    If you're looking to get in touch, show interest in joining,
+                    or volunteer with us, simply complete the form below. We'll
+                    reach out to you shortly!
+                </>
+            )
+        }
     </Block.SubHeader>
     <Block.Body slot="body" size="md">
-        <Form.Wrapper
-            name="contact"
-            action="/functions/enquiry"
-            button="Send Message"
-        >
-            <Form.TextBox
-                id="email"
-                type="email"
-                label="Email"
-                placeholder="bear.grylls@scouts.org.uk"
-                required={true}
-            />
+        {
+            (response == "error" || response == "success") && (
+                <a href="/#contact">
+                    <Button
+                        Icon={ArrowLeft}
+                        type="button"
+                        text="Submit another enquiry"
+                        iconClassName="order-first"
+                    />
+                </a>
+            )
+        }
+        {
+            response == "form" && (
+                <Form.Wrapper
+                    name="contact"
+                    method="POST"
+                    button="Send Message"
+                >
+                    <Form.TextBox
+                        id="email"
+                        type="email"
+                        label="Email"
+                        placeholder="bear.grylls@scouts.org.uk"
+                        required={true}
+                    />
 
-            <Form.TextBox
-                id="name"
-                type="text"
-                label="Name"
-                placeholder="Bear Grylls"
-                required={true}
-            />
+                    <Form.TextBox
+                        id="name"
+                        type="text"
+                        label="Name"
+                        placeholder="Bear Grylls"
+                        required={true}
+                    />
 
-            <Form.Select
-                id="subject"
-                label="Subject"
-                required={true}
-                options={[
-                    { type: "option", label: "General Enquiry", id: "enquiry" },
-                    {
-                        type: "group",
-                        label: "Sections",
-                        options: sections,
-                    },
-                ]}
-            />
+                    <Form.Select
+                        id="subject"
+                        label="Subject"
+                        required={true}
+                        options={options}
+                    />
 
-            <Form.TextArea
-                id="message"
-                label="Message"
-                placeholder="Leave a comment..."
-                required={true}
-            />
-        </Form.Wrapper>
+                    <Form.TextArea
+                        id="message"
+                        label="Message"
+                        placeholder="Leave a comment..."
+                        required={true}
+                    />
+                </Form.Wrapper>
+            )
+        }
     </Block.Body>
 </Block.Wrapper>

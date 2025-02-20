@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import PageLayout from "../layouts/page.layout.astro";
 
 import Hero from "../components/hero.astro";
@@ -8,9 +10,7 @@ import Address from "../components/address.astro";
 import ContactForm from "../components/contact-form.astro";
 ---
 
-<PageLayout
-	title="Home"
->
+<PageLayout title="Home">
 	<Hero />
 	<Sections />
 	<JoinUs />
