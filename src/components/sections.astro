@@ -3,10 +3,10 @@ import { getCollection } from "astro:content";
 import { Block, SectionsList, Seperator } from "basecamp/components";
 
 const sections = (await getCollection("sections"))
-	.sort((a, b) => {
-		return a.data.order - b.data.order;
-	})
-	.map((s) => s.data);
+    .sort((a, b) => {
+        return a.data.order - b.data.order;
+    })
+    .map((s) => s.data);
 ---
 
 <Block.Wrapper id="sections" variant="alternative">
@@ -16,8 +16,10 @@ const sections = (await getCollection("sections"))
     <Block.Header slot="header" className="text-primary">
         Our Sections
     </Block.Header>
-    <Block.SubHeader slot="subHeader">
-        Offering fun and challenging activities, unique experiences, everyday adventure and the chance to help others so that we make a positive impact in communities.
+    <Block.SubHeader slot="subHeader" tag="p">
+        Offering fun and challenging activities, unique experiences, everyday
+        adventure and the chance to help others so that we make a positive
+        impact in communities.
     </Block.SubHeader>
     <Block.Body slot="body" size="lg">
         <SectionsList sections={sections} />
